@@ -1,0 +1,8 @@
+__pychahe__
+.venv
+venv
+.idea
+.vscode
+vscode
+.DS_Store
+data
