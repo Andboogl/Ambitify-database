@@ -51,7 +51,6 @@ class Tasks(GettingDays):
 
             old_data = data.copy()[time]
             data.pop(time)
-            print(old_data)
             data[new_time] = {}
             data[new_time]['comment'] = old_data['comment']
             data[new_time]['progress'] = old_data['progress']
