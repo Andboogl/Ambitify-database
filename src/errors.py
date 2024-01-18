@@ -23,3 +23,10 @@ class TaskNotFoundError(Exception):
     Error when the task of
     the day is not found
     """
+
+
+class TaskExistsError(Exception):
+    """
+    Error when a task with the
+    same name already exists
+    """

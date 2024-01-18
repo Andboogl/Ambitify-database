@@ -7,7 +7,7 @@ Module for working with daily tasks
 import pickle
 from .getting_days import GettingDays
 from .. import config
-from ..errors import TaskNotFoundError
+from ..errors import TaskNotFoundError, TaskExistsError
 
 
 class Tasks(GettingDays):
@@ -23,6 +23,9 @@ class Tasks(GettingDays):
         """Add a daily task"""
         # Getting the day
         data = self.get_day(day)[1]
+
+        if data.get(time, None):
+            raise TaskExistsError('Task with this name already exists')
 
         # Loading tasks per day
         data[time] = {}
@@ -42,7 +45,10 @@ class Tasks(GettingDays):
         if not data.get(time, None):
             raise TaskNotFoundError('Task with this name not found')
 
-        if new_time.strip():
+        if new_time:
+            if data.get(new_time, None):
+                raise TaskExistsError('Task with this name already exists')
+
             old_data = data.copy()[time]
             data.pop(time)
             print(old_data)
@@ -51,7 +57,7 @@ class Tasks(GettingDays):
             data[new_time]['progress'] = old_data['progress']
             time = new_time
 
-        if new_comment.strip():
+        if new_comment:
             data[time]['comment'] = new_comment
 
         if new_progress:
