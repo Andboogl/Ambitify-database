@@ -16,7 +16,8 @@ class Days(GettingDays):
         """Add a new day to the database"""
         try:
             self.get_day(day)
-            raise errors.DayExistsError('A day with this name has already been created')
+            raise errors.DayExistsError(
+                'A day with this name has already been created')
 
         except errors.DayNotFoundError:
             request = f'INSERT INTO {config.DATA_TABLE_NAME} values (?, ?)'
@@ -27,7 +28,10 @@ class Days(GettingDays):
 
     def rename_day(self, day: str, new_name: str) -> None:
         """Rename the day"""
-        self.get_day(day)
+        if self.get_day(day)[0].lower() == new_name.lower():
+            raise errors.DayExistsError(
+                'A day with this name has already been created')
+
         request = f'UPDATE {config.DATA_TABLE_NAME} SET day == ? WHERE day == ?'
         data = (new_name, day)
         self.db.execute(request, data)
